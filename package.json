@@ -1,0 +1,59 @@
+{
+  "name": "gulp-assign-to-jade",
+  "version": "0.0.0",
+  "description": "Assign file contents to the Jade template as a local variable",
+  "scripts": {
+    "pretest": "jscs *.js && eslint *.js",
+    "test": "node test/test.js | tap-spec",
+    "coverage": "istanbul cover --no-default-excludes -x=node_modules/** test/test.js",
+    "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
+  },
+  "repository": "shinnn/gulp-assign-to-jade",
+  "author": {
+    "name": "Shinnosuke Watanabe",
+    "url": "https://github.com/shinnn"
+  },
+  "files": [
+    "index.js"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/shinnn/gulp-assign-to-jade/blob/master/LICENSE"
+    }
+  ],
+  "keywords": [
+    "gulpplugin",
+    "gulp",
+    "jade",
+    "compile",
+    "assign",
+    "variable",
+    "template",
+    "contents"
+  ],
+  "dependencies": {
+    "fs-readfile-promise": "^1.1.0",
+    "gulp-jade": "^0.11.0",
+    "gulp-util": "^3.0.2",
+    "replace-ext": "0.0.1",
+    "through2": "^0.6.3",
+    "vinyl-bufferstream": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^0.12.0",
+    "from2-array": "0.0.3",
+    "istanbul": "^0.3.5",
+    "istanbul-coveralls": "^1.0.1",
+    "jscs": "^1.10.0",
+    "tap-spec": "^2.2.0",
+    "tape": "^3.4.0",
+    "vinyl": "^0.4.6"
+  },
+  "jscsConfig": {
+    "preset": "google",
+    "requireBlocksOnNewline": true,
+    "maximumLineLength": 98,
+    "validateLineBreaks": "LF"
+  }
+}
