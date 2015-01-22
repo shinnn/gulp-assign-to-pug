@@ -18,8 +18,8 @@ install:
 build: off
 
 test_script:
-  - ps: 'npm run-script test-dot #PowerShell'
-  - cmd: npm run-script test-dot
+  - ps: 'node test\test.js #PowerShell'
+  - cmd: node test\test.js
 
 cache:
   - node_modules
