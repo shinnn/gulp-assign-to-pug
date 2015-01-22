@@ -58,16 +58,16 @@ test('gulp-assign-to-jade', function(t) {
     contents: from2array(['abcdefg'])
   }));
 
-  assignToJade('index.js', {})
+  assignToJade('test/fixture.jade', {})
   .on('error', function(err) {
     t.ok(
-      /unexpected token/.test(err.message),
+      /Invalid value/.test(err.message),
       'should emit an error when it fails to compile the template.'
     );
   })
   .end(new File({
     path: 'qux.txt',
-    contents: new Buffer('foo')
+    contents: new Buffer('error')
   }));
 
   var stream = assignToJade('this/file/does/not/exist.jade')
