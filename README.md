@@ -1,11 +1,11 @@
 # gulp-assign-to-jade
 
-[![NPM version](https://img.shields.io/npm/v/gulp-assign-to-jade.svg?style=flat)](https://www.npmjs.com/package/gulp-assign-to-jade)
+[![NPM version](https://img.shields.io/npm/v/gulp-assign-to-jade.svg)](https://www.npmjs.com/package/gulp-assign-to-jade)
 [![Build Status](https://travis-ci.org/shinnn/gulp-assign-to-jade.svg?branch=master)](https://travis-ci.org/shinnn/gulp-assign-to-jade)
 [![Build status](https://ci.appveyor.com/api/projects/status/vcy6r6t4vksxgei1?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/gulp-assign-to-jade)
-[![Coverage Status](https://img.shields.io/coveralls/shinnn/gulp-assign-to-jade.svg?style=flat)](https://coveralls.io/r/shinnn/gulp-assign-to-jade)
-[![Dependency Status](https://img.shields.io/david/shinnn/gulp-assign-to-jade.svg?style=flat&label=deps)](https://david-dm.org/shinnn/gulp-assign-to-jade)
-[![devDependency Status](https://img.shields.io/david/dev/shinnn/gulp-assign-to-jade.svg?style=flat&label=devDeps)](https://david-dm.org/shinnn/gulp-assign-to-jade#info=devDependencies)
+[![Coverage Status](https://img.shields.io/coveralls/shinnn/gulp-assign-to-jade.svg)](https://coveralls.io/r/shinnn/gulp-assign-to-jade)
+[![Dependency Status](https://img.shields.io/david/shinnn/gulp-assign-to-jade.svg?label=deps)](https://david-dm.org/shinnn/gulp-assign-to-jade)
+[![devDependency Status](https://img.shields.io/david/dev/shinnn/gulp-assign-to-jade.svg?label=devDeps)](https://david-dm.org/shinnn/gulp-assign-to-jade#info=devDependencies)
 
 gulp plugin to assign file contents to the [Jade](http://jade-lang.com/) template as a local variable
 
@@ -71,6 +71,6 @@ gulp.task('default', function() {
 
 ## License
 
-Copyright (c) [Shinnosuke Watanabe](https://github.com/shinnn)
+Copyright (c) 2015 [Shinnosuke Watanabe](https://github.com/shinnn)
 
 Licensed under [the MIT License](./LICENSE).
