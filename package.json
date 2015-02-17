@@ -1,6 +1,6 @@
 {
   "name": "gulp-assign-to-jade",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Assign file contents to the Jade template as a local variable",
   "scripts": {
     "pretest": "jscs *.js test/*.js && eslint *.js test/*.js",
