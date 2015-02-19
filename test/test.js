@@ -6,7 +6,9 @@ var from2array = require('from2-array');
 var test = require('tape');
 
 test('gulp-assign-to-jade', function(t) {
-  t.plan(9);
+  t.plan(11);
+
+  t.equal(assignToJade.name, 'gulpAssignToJade', 'should have a function name.');
 
   assignToJade('test/fixture.jade')
   .on('error', t.fail)
@@ -82,6 +84,22 @@ test('gulp-assign-to-jade', function(t) {
   }
 
   stream.end();
+
+  var corruptFile = {
+    clone: function() {
+      throw new Error('This is not a valid vinyl file.');
+    }
+  };
+
+  assignToJade('test/fixture.jade')
+  .on('error', function(err) {
+    t.equal(
+      err.message,
+      'This is not a valid vinyl file.',
+      'should emit an error when the file object is corrupt.'
+    );
+  })
+  .end(corruptFile);
 
   t.throws(
     assignToJade.bind(null, {}),

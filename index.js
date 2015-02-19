@@ -13,8 +13,8 @@ var replaceExt = require('replace-ext');
 var through = require('through2');
 var VinylBufferStream = require('vinyl-bufferstream');
 
-function customError(err) {
-  return new PluginError('gulp-assign-to-jade', err);
+function customError(err, options) {
+  return new PluginError('gulp-assign-to-jade', err, options);
 }
 
 module.exports = function gulpAssignToJade(filePath, options) {
@@ -67,19 +67,19 @@ module.exports = function gulpAssignToJade(filePath, options) {
       var run = new VinylBufferStream(assignContentsToJade);
 
       run(file, function(err, contents) {
-        process.nextTick(function() {
-          if (err) {
-            self.emit('error', err);
-          } else {
-            file.contents = contents;
-            self.push(file);
-          }
-          cb();
-        });
+        if (err) {
+          self.emit('error', err);
+        } else {
+          file.contents = contents;
+          self.push(file);
+        }
+        cb();
       });
     }, function(err) {
       self.emit('error', customError(err));
       self.destroy();
+    }).catch(function(err) {
+      self.emit('error', customError(err), {fileName: file.path});
     });
   });
 };
