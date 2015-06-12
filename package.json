@@ -2,26 +2,18 @@
   "name": "gulp-assign-to-jade",
   "version": "1.0.2",
   "description": "Assign file contents to the Jade template as a local variable",
+  "repository": "shinnn/gulp-assign-to-jade",
+  "author": "Shinnosuke Watanabe (https://github.com/shinnn)",
   "scripts": {
     "pretest": "eslint --config node_modules/@shinnn/eslintrc-node/rc.json index.js test/test.js",
-    "test": "node test/test.js | tap-spec",
+    "test": "node test/test.js",
     "coverage": "istanbul cover --no-default-excludes -x=node_modules/** test/test.js",
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
-  },
-  "repository": "shinnn/gulp-assign-to-jade",
-  "author": {
-    "name": "Shinnosuke Watanabe",
-    "url": "https://github.com/shinnn"
   },
   "files": [
     "index.js"
   ],
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/shinnn/gulp-assign-to-jade/blob/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "keywords": [
     "gulpplugin",
     "gulp",
@@ -33,21 +25,20 @@
     "contents"
   ],
   "dependencies": {
-    "fs-readfile-promise": "^1.1.0",
-    "gulp-jade": "^1.0.0",
-    "gulp-util": "^3.0.4",
+    "fs-readfile-promise": "^2.0.0",
+    "gulp-jade": "^1.0.1",
+    "gulp-util": "^3.0.5",
+    "readable-stream": "^2.0.0",
     "replace-ext": "0.0.1",
-    "through2": "^0.6.5",
     "vinyl-bufferstream": "^1.0.1"
   },
   "devDependencies": {
-    "@shinnn/eslintrc-node": "^1.0.1",
-    "eslint": "^0.20.0",
+    "@shinnn/eslintrc-node": "^1.0.2",
+    "eslint": "^0.22.1",
     "from2-array": "0.0.3",
-    "istanbul": "^0.3.13",
-    "istanbul-coveralls": "^1.0.2",
-    "tap-spec": "^3.0.0",
+    "istanbul": "^0.3.15",
+    "istanbul-coveralls": "^1.0.3",
     "tape": "^4.0.0",
-    "vinyl": "^0.4.6"
+    "vinyl": "^0.5.0"
   }
 }
