@@ -6,7 +6,7 @@ var from2array = require('from2-array');
 var test = require('tape');
 
 test('gulp-assign-to-jade', function(t) {
-  t.plan(11);
+  t.plan(14);
 
   t.equal(assignToJade.name, 'gulpAssignToJade', 'should have a function name.');
 
@@ -64,7 +64,12 @@ test('gulp-assign-to-jade', function(t) {
   .on('error', function(err) {
     t.ok(
       /Invalid value/.test(err.message),
-      'should emit an error when it fails to compile the template.'
+      'should emit an error when when Jade fails to compile the template.'
+    );
+    t.equal(
+      err.fileName,
+      'qux.txt',
+      'should include file path to the error when Jade fails to compile the template.'
     );
   })
   .end(new File({
@@ -75,18 +80,20 @@ test('gulp-assign-to-jade', function(t) {
   var stream = assignToJade('this/file/does/not/exist.jade')
   .on('error', function(err) {
     t.equal(err.code, 'ENOENT', 'should emit an error when it cannot read the template.');
+    t.strictEqual(
+      err.fileName,
+      undefined,
+      'should not include vinyl file path to the error when it cannot read the template.'
+    );
+
+    stream.end(new File({contents: new Buffer('This file should be ignored.')}));
   });
 
-  var count = 1000;
-
-  while (count--) {
-    stream.write(new File());
-  }
-
-  stream.end();
+  stream.write(new File({path: 'this/path/should/not/be/included/to/the/error'}));
 
   var corruptFile = {
-    clone: function() {
+    path: 'quux.txt',
+    clone: function corruptVinylMethod() {
       throw new Error('This is not a valid vinyl file.');
     }
   };
@@ -97,6 +104,11 @@ test('gulp-assign-to-jade', function(t) {
       err.message,
       'This is not a valid vinyl file.',
       'should emit an error when the file object is corrupt.'
+    );
+    t.equal(
+      err.fileName,
+      'quux.txt',
+      'should include file path to the error when the file object is corrupt.'
     );
   })
   .end(corruptFile);
