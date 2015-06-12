@@ -10,7 +10,7 @@ var gulpJade = require('gulp-jade');
 var PluginError = require('gulp-util').PluginError;
 var readFilePromise = require('fs-readfile-promise');
 var replaceExt = require('replace-ext');
-var through = require('through2');
+var Transform = require('readable-stream').Transform;
 var VinylBufferStream = require('vinyl-bufferstream');
 
 function customError(err, options) {
@@ -42,44 +42,46 @@ module.exports = function gulpAssignToJade(filePath, options) {
     varName = 'contents';
   }
 
-  return through.obj(function(file, enc, cb) {
-    var self = this;
+  return new Transform({
+    objectMode: true,
+    transform: function gulpAssignToJadeTransform(file, enc, cb) {
+      var self = this;
 
-    promise.then(function(jade) {
-      var fileClone = file.clone({contents: false});
-      fileClone.contents = jade;
-      fileClone.data = file.data || {};
+      promise.then(function(jade) {
+        var fileClone = file.clone({contents: false});
+        fileClone.contents = jade;
+        fileClone.data = file.data || {};
 
-      function assignContentsToJade(buf, done) {
-        fileClone.data[varName] = String(buf);
+        function assignContentsToJade(buf, done) {
+          fileClone.data[varName] = String(buf);
 
-        gulpJade(options)
-        .on('error', function(err) {
-          done(customError(err));
-        })
-        .once('data', function(newFile) {
-          file.path = replaceExt(file.path, path.extname(newFile.path));
-          done(null, newFile.contents);
-        })
-        .end(fileClone);
-      }
-
-      var run = new VinylBufferStream(assignContentsToJade);
-
-      run(file, function(err, contents) {
-        if (err) {
-          self.emit('error', err);
-        } else {
-          file.contents = contents;
-          self.push(file);
+          gulpJade(options)
+          .on('error', function(err) {
+            done(customError(err));
+          })
+          .once('data', function(newFile) {
+            file.path = replaceExt(file.path, path.extname(newFile.path));
+            done(null, newFile.contents);
+          })
+          .end(fileClone);
         }
-        cb();
+
+        var run = new VinylBufferStream(assignContentsToJade);
+
+        run(file, function(err, contents) {
+          if (err) {
+            self.emit('error', customError(err, {fileName: file.path}));
+          } else {
+            file.contents = contents;
+            self.push(file);
+          }
+          cb();
+        });
+      }, function(err) {
+        self.emit('error', err);
+      }).catch(function(err) {
+        self.emit('error', customError(err, {fileName: file.path}));
       });
-    }, function(err) {
-      self.emit('error', customError(err));
-      self.destroy();
-    }).catch(function(err) {
-      self.emit('error', customError(err), {fileName: file.path});
-    });
+    }
   });
 };
