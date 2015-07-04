@@ -1,6 +1,6 @@
 {
   "name": "gulp-assign-to-jade",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Assign file contents to the Jade template as a local variable",
   "repository": "shinnn/gulp-assign-to-jade",
   "author": "Shinnosuke Watanabe (https://github.com/shinnn)",
@@ -27,16 +27,16 @@
   "dependencies": {
     "fs-readfile-promise": "^2.0.0",
     "gulp-jade": "^1.0.1",
-    "gulp-util": "^3.0.5",
-    "readable-stream": "^2.0.0",
+    "gulp-util": "^3.0.6",
+    "readable-stream": "^2.0.1",
     "replace-ext": "0.0.1",
     "vinyl-bufferstream": "^1.0.1"
   },
   "devDependencies": {
     "@shinnn/eslintrc-node": "^1.0.2",
-    "eslint": "^0.22.1",
-    "from2-array": "0.0.3",
-    "istanbul": "^0.3.15",
+    "eslint": "^0.24.0",
+    "from2-array": "^0.0.3",
+    "istanbul": "^0.3.17",
     "istanbul-coveralls": "^1.0.3",
     "tape": "^4.0.0",
     "vinyl": "^0.5.0"
