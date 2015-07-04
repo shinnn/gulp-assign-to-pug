@@ -10,10 +10,10 @@
 gulp plugin to assign file contents to the [Jade](http://jade-lang.com/) template as a local variable
 
 ```javascript
-var gulp = require('gulp');
-var assignToJade = require('gulp-assign-to-jade');
+const gulp = require('gulp');
+const assignToJade = require('gulp-assign-to-jade');
 
-gulp.task('default', function() {
+gulp.task('default', () => {
   return gulp.src('contents.txt')      // contents.txt      : 'Hello'
     .pipe(assignToJade('layout.jade')) // layout.jade       : 'div= contents'
     .pipe(gulp.dest('dest'))           // dest/contents.html: '<div>Hello</div>'
@@ -24,14 +24,14 @@ gulp.task('default', function() {
 
 [Use npm.](https://docs.npmjs.com/cli/install)
 
-```sh
+```
 npm install --save-dev gulp-assign-to-jade
 ```
 
 ## API
 
 ```javascript
-var assignToJade = require('gulp-assign-to-jade');
+const assignToJade = require('gulp-assign-to-jade');
 ```
 
 ### assignToJade(*templatePath* [, *options*])
@@ -50,16 +50,16 @@ Default: `contents`
 Sets the variable name to which the file contents will be assigned.
 
 ```javascript
-var path = require('path');
-var gulp = require('gulp');
-var assignToJade = require('gulp-assign-to-jade');
-var data = require('gulp-data');
+const path = require('path');
+const gulp = require('gulp');
+const assignToJade = require('gulp-assign-to-jade');
+const data = require('gulp-data');
 
 function setTitle(file) {
   return: {title: path.basename(file.path)};
 }
 
-gulp.task('default', function() {
+gulp.task('default', () => {
   return gulp.src('src.txt')            // src.txt      : 'Hi'
     .pipe(data(setTitle)) 
     .pipe(assignToJade('layout.jade', { // template.jade: 'h1= title\np=  body'
