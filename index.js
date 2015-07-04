@@ -10,7 +10,7 @@ var gulpJade = require('gulp-jade');
 var PluginError = require('gulp-util').PluginError;
 var readFilePromise = require('fs-readfile-promise');
 var replaceExt = require('replace-ext');
-var Transform = require('readable-stream').Transform;
+var Transform = require('readable-stream/transform');
 var VinylBufferStream = require('vinyl-bufferstream');
 
 function customError(err, options) {
