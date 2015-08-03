@@ -1,18 +1,18 @@
-'use strict';
+'use strong';
 
-var assignToJade = require('..');
-var File = require('vinyl');
-var from2array = require('from2-array');
-var test = require('tape');
+const assignToJade = require('..');
+const File = require('vinyl');
+const stringToStream = require('from2-string');
+const test = require('tape');
 
-test('gulp-assign-to-jade', function(t) {
+test('gulp-assign-to-jade', t => {
   t.plan(14);
 
   t.equal(assignToJade.name, 'gulpAssignToJade', 'should have a function name.');
 
   assignToJade('test/fixture.jade')
   .on('error', t.fail)
-  .on('data', function(file) {
+  .on('data', file => {
     t.equal(
       String(file.contents),
       '<section><a></a><div></div></section>',
@@ -25,7 +25,7 @@ test('gulp-assign-to-jade', function(t) {
     contents: new Buffer('<a></a>')
   }));
 
-  var tmpFile = new File({
+  const tmpFile = new File({
     path: 'bar.txt',
     contents: new Buffer('12345')
   });
@@ -34,7 +34,7 @@ test('gulp-assign-to-jade', function(t) {
 
   assignToJade('test/fixture.jade', {pretty: true})
   .on('error', t.fail)
-  .on('data', function(file) {
+  .on('data', file => {
     t.equal(
       String(file.contents),
       '\n<section>12345\n  <div>Hello</div></section>',
@@ -46,8 +46,8 @@ test('gulp-assign-to-jade', function(t) {
 
   assignToJade('test/fixture.jade', {varName: 'footer'})
   .on('error', t.fail)
-  .on('data', function(file) {
-    file.contents.on('data', function(data) {
+  .on('data', file => {
+    file.contents.on('data', data => {
       t.equal(
         String(data),
         '<section><div></div></section><footer>abcdefg</footer>',
@@ -57,11 +57,11 @@ test('gulp-assign-to-jade', function(t) {
   })
   .end(new File({
     path: 'baz.txt',
-    contents: from2array(['abcdefg'])
+    contents: stringToStream('abcdefg')
   }));
 
   assignToJade('test/fixture.jade', {})
-  .on('error', function(err) {
+  .on('error', err => {
     t.ok(
       /Invalid value/.test(err.message),
       'should emit an error when when Jade fails to compile the template.'
@@ -77,21 +77,20 @@ test('gulp-assign-to-jade', function(t) {
     contents: new Buffer('error')
   }));
 
-  var stream = assignToJade('this/file/does/not/exist.jade')
+  assignToJade('this/file/does/not/exist.jade')
   .on('error', function(err) {
     t.equal(err.code, 'ENOENT', 'should emit an error when it cannot read the template.');
     t.strictEqual(
-      err.fileName,
-      undefined,
+      err.hasOwnProperty('fileName'),
+      false,
       'should not include vinyl file path to the error when it cannot read the template.'
     );
 
-    stream.end(new File({contents: new Buffer('This file should be ignored.')}));
-  });
+    this.end(new File({contents: new Buffer('This file should be ignored.')}));
+  })
+  .write(new File({path: 'this/path/should/not/be/included/to/the/error'}));
 
-  stream.write(new File({path: 'this/path/should/not/be/included/to/the/error'}));
-
-  var corruptFile = {
+  const corruptFile = {
     path: 'quux.txt',
     clone: function corruptVinylMethod() {
       throw new Error('This is not a valid vinyl file.');
@@ -99,7 +98,7 @@ test('gulp-assign-to-jade', function(t) {
   };
 
   assignToJade('test/fixture.jade')
-  .on('error', function(err) {
+  .on('error', err => {
     t.equal(
       err.message,
       'This is not a valid vinyl file.',
@@ -114,13 +113,13 @@ test('gulp-assign-to-jade', function(t) {
   .end(corruptFile);
 
   t.throws(
-    assignToJade.bind(null, {}),
+    () => assignToJade({}),
     /must be a path/,
     'should throw an error when the first argument is not a string.'
   );
 
   t.throws(
-    assignToJade.bind(null, '', {varName: 123}),
+    () => assignToJade('', {varName: 123}),
     /must be a string/,
     'should throw an error when the `varName` option is not a string.'
   );

@@ -5,9 +5,9 @@
   "repository": "shinnn/gulp-assign-to-jade",
   "author": "Shinnosuke Watanabe (https://github.com/shinnn)",
   "scripts": {
-    "pretest": "eslint --config node_modules/@shinnn/eslintrc-node/rc.json index.js test/test.js",
-    "test": "node test/test.js",
-    "coverage": "istanbul cover --no-default-excludes -x=node_modules/** test/test.js",
+    "pretest": "eslint --config @shinnn/node index.js test/test.js",
+    "test": "node --strong_mode test/test.js",
+    "coverage": "node --strong_mode node_modules/.bin/istanbul cover --no-default-excludes -x=node_modules/** test/test.js",
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
   "files": [
@@ -25,20 +25,19 @@
     "contents"
   ],
   "dependencies": {
-    "fs-readfile-promise": "^2.0.0",
-    "gulp-jade": "^1.0.1",
+    "fs-readfile-promise": "^2.0.1",
+    "gulp-jade": "^1.1.0",
     "gulp-util": "^3.0.6",
-    "readable-stream": "^2.0.1",
-    "replace-ext": "0.0.1",
+    "replace-ext": "^0.0.1",
     "vinyl-bufferstream": "^1.0.1"
   },
   "devDependencies": {
-    "@shinnn/eslintrc-node": "^1.0.2",
-    "eslint": "^0.24.0",
-    "from2-array": "^0.0.3",
-    "istanbul": "^0.3.17",
+    "@shinnn/eslint-config-node": "^1.0.1",
+    "eslint": "^1.4.1",
+    "from2-string": "^1.1.0",
+    "istanbul": "^0.3.19",
     "istanbul-coveralls": "^1.0.3",
-    "tape": "^4.0.0",
-    "vinyl": "^0.5.0"
+    "tape": "^4.2.0",
+    "vinyl": "^0.5.3"
   }
 }

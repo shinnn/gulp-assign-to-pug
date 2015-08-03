@@ -4,14 +4,14 @@
 */
 'use strict';
 
-var path = require('path');
+const path = require('path');
+const Transform = require('stream').Transform;
 
-var gulpJade = require('gulp-jade');
-var PluginError = require('gulp-util').PluginError;
-var readFilePromise = require('fs-readfile-promise');
-var replaceExt = require('replace-ext');
-var Transform = require('readable-stream/transform');
-var VinylBufferStream = require('vinyl-bufferstream');
+const gulpJade = require('gulp-jade');
+const PluginError = require('gulp-util').PluginError;
+const readFilePromise = require('fs-readfile-promise');
+const replaceExt = require('replace-ext');
+const VinylBufferStream = require('vinyl-bufferstream');
 
 function customError(err, options) {
   return new PluginError('gulp-assign-to-jade', err, options);
@@ -20,20 +20,20 @@ function customError(err, options) {
 module.exports = function gulpAssignToJade(filePath, options) {
   if (typeof filePath !== 'string') {
     throw customError(new TypeError(
-      filePath +
+      String(filePath) +
       ' is not a string. The first argument to gulp-assign-to-jade must be a path to a jade file.'
     ));
   }
 
   options = options || {};
 
-  var promise = readFilePromise(filePath);
+  const promise = readFilePromise(filePath);
 
-  var varName;
+  let varName;
   if (options.varName !== undefined) {
     if (typeof options.varName !== 'string') {
       throw customError(new TypeError(
-        options.varName +
+        String(options.varName) +
         ' is not a string. `varName` option must be a string.'
       ));
     }
@@ -45,10 +45,8 @@ module.exports = function gulpAssignToJade(filePath, options) {
   return new Transform({
     objectMode: true,
     transform: function gulpAssignToJadeTransform(file, enc, cb) {
-      var self = this;
-
-      promise.then(function(jade) {
-        var fileClone = file.clone({contents: false});
+      promise.then(jade => {
+        const fileClone = file.clone({contents: false});
         fileClone.contents = jade;
         fileClone.data = file.data || {};
 
@@ -56,31 +54,31 @@ module.exports = function gulpAssignToJade(filePath, options) {
           fileClone.data[varName] = String(buf);
 
           gulpJade(options)
-          .on('error', function(err) {
+          .on('error', function emitGulpJadeError(err) {
             done(customError(err));
           })
-          .once('data', function(newFile) {
+          .once('data', function emitGulpJadeData(newFile) {
             file.path = replaceExt(file.path, path.extname(newFile.path));
             done(null, newFile.contents);
           })
           .end(fileClone);
         }
 
-        var run = new VinylBufferStream(assignContentsToJade);
+        const run = new VinylBufferStream(assignContentsToJade);
 
-        run(file, function(err, contents) {
+        run(file, (err, contents) => {
           if (err) {
-            self.emit('error', customError(err, {fileName: file.path}));
+            this.emit('error', customError(err, {fileName: file.path}));
           } else {
             file.contents = contents;
-            self.push(file);
+            this.push(file);
           }
           cb();
         });
-      }, function(err) {
-        self.emit('error', err);
-      }).catch(function(err) {
-        self.emit('error', customError(err, {fileName: file.path}));
+      }, err => {
+        setImmediate(() => this.emit('error', err));
+      }).catch(err => {
+        setImmediate(() => this.emit('error', customError(err, {fileName: file.path})));
       });
     }
   });
