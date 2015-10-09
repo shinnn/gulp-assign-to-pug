@@ -2,7 +2,7 @@ shallow_clone: true
 version: '{build}'
 skip_tags: true
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node 5
   - npm install
 build: off
 test_script: node --strong_mode test\test.js
