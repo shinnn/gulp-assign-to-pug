@@ -36,7 +36,6 @@
     "eslint": "^1.8.0",
     "from2-string": "^1.1.0",
     "istanbul": "^0.4.0",
-    "istanbul-coveralls": "^1.0.3",
     "tape": "^4.2.2",
     "vinyl": "^1.1.0"
   }
