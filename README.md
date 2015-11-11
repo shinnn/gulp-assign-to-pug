@@ -4,10 +4,10 @@
 [![Build Status](https://travis-ci.org/shinnn/gulp-assign-to-jade.svg?branch=master)](https://travis-ci.org/shinnn/gulp-assign-to-jade)
 [![Build status](https://ci.appveyor.com/api/projects/status/vcy6r6t4vksxgei1?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/gulp-assign-to-jade)
 [![Coverage Status](https://img.shields.io/coveralls/shinnn/gulp-assign-to-jade.svg)](https://coveralls.io/r/shinnn/gulp-assign-to-jade)
-[![Dependency Status](https://img.shields.io/david/shinnn/gulp-assign-to-jade.svg?label=deps)](https://david-dm.org/shinnn/gulp-assign-to-jade)
-[![devDependency Status](https://img.shields.io/david/dev/shinnn/gulp-assign-to-jade.svg?label=devDeps)](https://david-dm.org/shinnn/gulp-assign-to-jade#info=devDependencies)
+[![Dependency Status](https://david-dm.org/shinnn/gulp-assign-to-jade.svg)](https://david-dm.org/shinnn/gulp-assign-to-jade)
+[![devDependency Status](https://david-dm.org/shinnn/gulp-assign-to-jade/dev-status.svg)](https://david-dm.org/shinnn/gulp-assign-to-jade#info=devDependencies)
 
-gulp plugin to assign file contents to the [Jade](http://jade-lang.com/) template as a local variable
+[gulp](https://github.com/gulpjs/gulp) plugin to assign file contents to the [Jade](http://jade-lang.com/) template as a local variable
 
 ```javascript
 const gulp = require('gulp');
@@ -38,9 +38,9 @@ const assignToJade = require('gulp-assign-to-jade');
 
 *templatePath*: `String` (path to a `.jade` file)  
 *options*: `Object` (directly passed to [gulp-jade](https://github.com/phated/gulp-jade#options) options)  
-Return: `Object` ([stream.Transform](https://iojs.org/api/stream.html#stream_class_stream_transform))
+Return: `Object` ([stream.Transform](https://nodejs.org/api/stream.html#stream_class_stream_transform))
 
-It compiles the [Jade](https://github.com/jadejs/jade) template with passing the string of source [file contents](https://github.com/wearefractal/vinyl#optionscontents) to the compiler as `contents` variable. [`data` property](https://github.com/phated/gulp-jade#use-with-gulp-data) of the contents are also used.
+It compiles the [Jade](https://github.com/jadejs/jade) template with passing the string of source [file contents](https://github.com/gulpjs/vinyl#optionscontents) to the compiler as `contents` variable. [`data` property](https://github.com/phated/gulp-jade#use-with-gulp-data) of the contents are also used.
 
 #### options.varName
 
