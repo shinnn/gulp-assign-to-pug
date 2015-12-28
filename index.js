@@ -8,7 +8,7 @@ const path = require('path');
 const Transform = require('stream').Transform;
 
 const gulpJade = require('gulp-jade');
-const PluginError = require('gulp-util').PluginError;
+const PluginError = require('gulp-util/lib/PluginError.js');
 const readFilePromise = require('fs-readfile-promise');
 const replaceExt = require('replace-ext');
 const VinylBufferStream = require('vinyl-bufferstream');
