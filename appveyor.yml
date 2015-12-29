@@ -3,6 +3,8 @@ version: '{build}'
 skip_tags: true
 install:
   - ps: Install-Product node 5
+  - npm install --global npm
+  - set PATH=%APPDATA%\npm;%PATH%
   - npm install
 build: off
 test_script: node --strong_mode test\test.js

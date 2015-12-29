@@ -5,6 +5,7 @@ branches:
   except: /^v\d/
 language: node_js
 node_js: stable
+before_install: npm install --global npm
 script:
   - npm run-script pretest
   - npm run-script coverage
