@@ -1,21 +1,21 @@
-# gulp-assign-to-jade
+# gulp-assign-to-pug
 
-[![NPM version](https://img.shields.io/npm/v/gulp-assign-to-jade.svg)](https://www.npmjs.com/package/gulp-assign-to-jade)
-[![Build Status](https://travis-ci.org/shinnn/gulp-assign-to-jade.svg?branch=master)](https://travis-ci.org/shinnn/gulp-assign-to-jade)
-[![Build status](https://ci.appveyor.com/api/projects/status/vcy6r6t4vksxgei1?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/gulp-assign-to-jade)
-[![Coverage Status](https://img.shields.io/coveralls/shinnn/gulp-assign-to-jade.svg)](https://coveralls.io/r/shinnn/gulp-assign-to-jade)
-[![Dependency Status](https://david-dm.org/shinnn/gulp-assign-to-jade.svg)](https://david-dm.org/shinnn/gulp-assign-to-jade)
-[![devDependency Status](https://david-dm.org/shinnn/gulp-assign-to-jade/dev-status.svg)](https://david-dm.org/shinnn/gulp-assign-to-jade#info=devDependencies)
+[![NPM version](https://img.shields.io/npm/v/gulp-assign-to-pug.svg)](https://www.npmjs.com/package/gulp-assign-to-pug)
+[![Build Status](https://travis-ci.org/shinnn/gulp-assign-to-pug.svg?branch=master)](https://travis-ci.org/shinnn/gulp-assign-to-pug)
+[![Build status](https://ci.appveyor.com/api/projects/status/an9bqn2br7bw23nl/branch/master?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/gulp-assign-to-pug/branch/master)
+[![Coverage Status](https://coveralls.io/repos/github/shinnn/gulp-assign-to-pug/badge.svg?branch=master)](https://coveralls.io/github/shinnn/gulp-assign-to-pug?branch=master)
+[![Dependency Status](https://david-dm.org/shinnn/gulp-assign-to-pug.svg)](https://david-dm.org/shinnn/gulp-assign-to-pug)
+[![devDependency Status](https://david-dm.org/shinnn/gulp-assign-to-pug/dev-status.svg)](https://david-dm.org/shinnn/gulp-assign-to-pug#info=devDependencies)
 
-[gulp](https://github.com/gulpjs/gulp) plugin to assign file contents to the [Jade](http://jade-lang.com/) template as a local variable
+[gulp](https://github.com/gulpjs/gulp) plugin to assign file contents to the [Pug](http://jade-lang.com/) template as a local variable
 
 ```javascript
 const gulp = require('gulp');
-const assignToJade = require('gulp-assign-to-jade');
+const assignToPug = require('gulp-assign-to-pug');
 
 gulp.task('default', () => {
   return gulp.src('contents.txt')      // contents.txt      : 'Hello'
-    .pipe(assignToJade('layout.jade')) // layout.jade       : 'div= contents'
+    .pipe(assignToPug('layout.jade')) // layout.jade       : 'div= contents'
     .pipe(gulp.dest('dest'))           // dest/contents.html: '<div>Hello</div>'
 });
 ```
@@ -25,22 +25,22 @@ gulp.task('default', () => {
 [Use npm.](https://docs.npmjs.com/cli/install)
 
 ```
-npm install --save-dev gulp-assign-to-jade
+npm install --save-dev gulp-assign-to-pug
 ```
 
 ## API
 
 ```javascript
-const assignToJade = require('gulp-assign-to-jade');
+const assignToJade = require('gulp-assign-to-pug');
 ```
 
-### assignToJade(*templatePath* [, *options*])
+### assignToPug(*templatePath* [, *options*])
 
 *templatePath*: `String` (path to a `.jade` file)  
 *options*: `Object` (directly passed to [gulp-jade](https://github.com/phated/gulp-jade#options) options)  
 Return: `Object` ([stream.Transform](https://nodejs.org/api/stream.html#stream_class_stream_transform))
 
-It compiles the [Jade](https://github.com/jadejs/jade) template with passing the string of source [file contents](https://github.com/gulpjs/vinyl#optionscontents) to the compiler as `contents` variable. [`data` property](https://github.com/phated/gulp-jade#use-with-gulp-data) of the contents are also used.
+It compiles the [Pug](https://github.com/pugjs/jade) template with passing the string of source [file contents](https://github.com/gulpjs/vinyl#optionscontents) to the compiler as `contents` variable. [`data` property](https://github.com/phated/gulp-jade#use-with-gulp-data) of the contents are also used.
 
 #### options.varName
 
@@ -52,7 +52,7 @@ Sets the variable name to which the file contents will be assigned.
 ```javascript
 const path = require('path');
 const gulp = require('gulp');
-const assignToJade = require('gulp-assign-to-jade');
+const assignToPug = require('gulp-assign-to-pug');
 const data = require('gulp-data');
 
 function setTitle(file) {
@@ -62,7 +62,7 @@ function setTitle(file) {
 gulp.task('default', () => {
   return gulp.src('src.txt')            // src.txt      : 'Hi'
     .pipe(data(setTitle)) 
-    .pipe(assignToJade('layout.jade', { // template.jade: 'h1= title\np=  body'
+    .pipe(assignToPug('layout.jade', { // template.jade: 'h1= title\np=  body'
       varName: 'body'
     })) 
     .pipe(gulp.dest('dest'))            // dest/src.html: '<h1>src</h1><p>Hi</p>'
@@ -71,6 +71,6 @@ gulp.task('default', () => {
 
 ## License
 
-Copyright (c) 2015 [Shinnosuke Watanabe](https://github.com/shinnn)
+Copyright (c) 2015 - 2016 [Shinnosuke Watanabe](https://github.com/shinnn)
 
 Licensed under [the MIT License](./LICENSE).

@@ -1,22 +1,22 @@
 'use strong';
 
-const assignToJade = require('..');
+const assignToPug = require('..');
 const File = require('vinyl');
 const stringToStream = require('from2-string');
 const test = require('tape');
 
-test('gulp-assign-to-jade', t => {
+test('gulp-assign-to-pug', t => {
   t.plan(14);
 
-  t.equal(assignToJade.name, 'gulpAssignToJade', 'should have a function name.');
+  t.equal(assignToPug.name, 'gulpAssignToPug', 'should have a function name.');
 
-  assignToJade('test/fixture.jade')
+  assignToPug('test/fixture.jade')
   .on('error', t.fail)
   .on('data', file => {
     t.equal(
       String(file.contents),
       '<section><a></a><div></div></section>',
-      'should assign file contents to a Jade template.'
+      'should assign file contents to a Pug template.'
     );
     t.equal(file.path, 'foo.html', 'should keep source file path.');
   })
@@ -32,19 +32,19 @@ test('gulp-assign-to-jade', t => {
 
   tmpFile.data = {title: 'Hello'};
 
-  assignToJade('test/fixture.jade', {pretty: true})
+  assignToPug('test/fixture.jade', {pretty: true})
   .on('error', t.fail)
   .on('data', file => {
     t.equal(
       String(file.contents),
       '\n<section>12345\n  <div>Hello</div></section>',
-      'should use file.data and Jade options.'
+      'should use file.data and Pug options.'
     );
     t.equal(file.path, 'bar.html', 'should replace file extension with .html.');
   })
   .end(tmpFile);
 
-  assignToJade('test/fixture.jade', {varName: 'footer'})
+  assignToPug('test/fixture.jade', {varName: 'footer'})
   .on('error', t.fail)
   .on('data', file => {
     file.contents.on('data', data => {
@@ -60,16 +60,16 @@ test('gulp-assign-to-jade', t => {
     contents: stringToStream('abcdefg')
   }));
 
-  assignToJade('test/fixture.jade', {})
+  assignToPug('test/fixture.jade', {})
   .on('error', err => {
     t.ok(
       /Invalid value/.test(err.message),
-      'should emit an error when when Jade fails to compile the template.'
+      'should emit an error when when Pug fails to compile the template.'
     );
     t.equal(
       err.fileName,
       'qux.txt',
-      'should include file path to the error when Jade fails to compile the template.'
+      'should include file path to the error when Pug fails to compile the template.'
     );
   })
   .end(new File({
@@ -77,7 +77,7 @@ test('gulp-assign-to-jade', t => {
     contents: new Buffer('error')
   }));
 
-  assignToJade('this/file/does/not/exist.jade')
+  assignToPug('this/file/does/not/exist.jade')
   .on('error', function(err) {
     t.equal(err.code, 'ENOENT', 'should emit an error when it cannot read the template.');
     t.strictEqual(
@@ -97,7 +97,7 @@ test('gulp-assign-to-jade', t => {
     }
   };
 
-  assignToJade('test/fixture.jade')
+  assignToPug('test/fixture.jade')
   .on('error', err => {
     t.equal(
       err.message,
@@ -113,13 +113,13 @@ test('gulp-assign-to-jade', t => {
   .end(corruptFile);
 
   t.throws(
-    () => assignToJade({}),
+    () => assignToPug({}),
     /must be a path/,
     'should throw an error when the first argument is not a string.'
   );
 
   t.throws(
-    () => assignToJade('', {varName: 123}),
+    () => assignToPug('', {varName: 123}),
     /must be a string/,
     'should throw an error when the `varName` option is not a string.'
   );

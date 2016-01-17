@@ -1,6 +1,6 @@
 /*!
- * gulp-assign-to-jade | MIT (c) Shinnosuke Watanabe
- * https://github.com/shinnn/gulp-assign-to-jade
+ * gulp-assign-to-pug | MIT (c) Shinnosuke Watanabe
+ * https://github.com/shinnn/gulp-assign-to-pug
 */
 'use strict';
 
@@ -14,14 +14,14 @@ const replaceExt = require('replace-ext');
 const VinylBufferStream = require('vinyl-bufferstream');
 
 function customError(err, options) {
-  return new PluginError('gulp-assign-to-jade', err, options);
+  return new PluginError('gulp-assign-to-pug', err, options);
 }
 
-module.exports = function gulpAssignToJade(filePath, options) {
+module.exports = function gulpAssignToPug(filePath, options) {
   if (typeof filePath !== 'string') {
     throw customError(new TypeError(
       String(filePath) +
-      ' is not a string. The first argument to gulp-assign-to-jade must be a path to a jade file.'
+      ' is not a string. The first argument to gulp-assign-to-pug must be a path to a pug file.'
     ));
   }
 
@@ -44,13 +44,13 @@ module.exports = function gulpAssignToJade(filePath, options) {
 
   return new Transform({
     objectMode: true,
-    transform: function gulpAssignToJadeTransform(file, enc, cb) {
-      promise.then(jade => {
+    transform: function gulpAssignToPugTransform(file, enc, cb) {
+      promise.then(template => {
         const fileClone = file.clone({contents: false});
-        fileClone.contents = jade;
+        fileClone.contents = template;
         fileClone.data = file.data || {};
 
-        function assignContentsToJade(buf, done) {
+        function assignContentsToPug(buf, done) {
           fileClone.data[varName] = String(buf);
 
           gulpJade(options)
@@ -64,7 +64,7 @@ module.exports = function gulpAssignToJade(filePath, options) {
           .end(fileClone);
         }
 
-        const run = new VinylBufferStream(assignContentsToJade);
+        const run = new VinylBufferStream(assignContentsToPug);
 
         run(file, (err, contents) => {
           if (err) {
