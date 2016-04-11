@@ -33,11 +33,11 @@
     "vinyl-bufferstream": "^1.0.1"
   },
   "devDependencies": {
-    "@shinnn/eslint-config-node": "^1.0.1",
-    "eslint": "^1.10.3",
+    "@shinnn/eslint-config-node": "^2.0.0",
+    "eslint": "^2.7.0",
     "from2-string": "^1.1.0",
-    "istanbul": "^0.4.1",
-    "tape": "^4.4.0",
-    "vinyl": "^1.1.0"
+    "istanbul": "^0.4.3",
+    "tape": "^4.5.1",
+    "vinyl": "^1.1.1"
   }
 }
