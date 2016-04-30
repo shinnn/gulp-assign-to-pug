@@ -1,6 +1,6 @@
 {
   "name": "gulp-assign-to-pug",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Assign file contents to the Pug template as a local variable",
   "repository": "shinnn/gulp-assign-to-pug",
   "author": "Shinnosuke Watanabe (https://github.com/shinnn)",
