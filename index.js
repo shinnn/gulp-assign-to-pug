@@ -7,7 +7,7 @@
 const path = require('path');
 const Transform = require('stream').Transform;
 
-const gulpJade = require('gulp-jade');
+const gulpPug = require('gulp-pug');
 const PluginError = require('gulp-util/lib/PluginError.js');
 const readFilePromise = require('fs-readfile-promise');
 const replaceExt = require('replace-ext');
@@ -53,7 +53,7 @@ module.exports = function gulpAssignToPug(filePath, options) {
         function assignContentsToPug(buf, done) {
           fileClone.data[varName] = String(buf);
 
-          gulpJade(options)
+          gulpPug(options)
           .on('error', function emitGulpJadeError(err) {
             done(customError(err));
           })

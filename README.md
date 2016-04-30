@@ -14,9 +14,9 @@ const gulp = require('gulp');
 const assignToPug = require('gulp-assign-to-pug');
 
 gulp.task('default', () => {
-  return gulp.src('contents.txt')      // contents.txt      : 'Hello'
-    .pipe(assignToPug('layout.jade')) // layout.jade       : 'div= contents'
-    .pipe(gulp.dest('dest'))           // dest/contents.html: '<div>Hello</div>'
+  return gulp.src('contents.txt')    // contents.txt      : 'Hello'
+    .pipe(assignToPug('layout.pug')) // layout.pug        : 'div= contents'
+    .pipe(gulp.dest('dest'))         // dest/contents.html: '<div>Hello</div>'
 });
 ```
 
@@ -31,16 +31,16 @@ npm install --save-dev gulp-assign-to-pug
 ## API
 
 ```javascript
-const assignToJade = require('gulp-assign-to-pug');
+const assignToPug = require('gulp-assign-to-pug');
 ```
 
 ### assignToPug(*templatePath* [, *options*])
 
 *templatePath*: `String` (path to a `.jade` file)  
-*options*: `Object` (directly passed to [gulp-jade](https://github.com/phated/gulp-jade#options) options)  
+*options*: `Object` (directly passed to [gulp-pug](https://github.com/jamen/gulp-pug) options)  
 Return: `Object` ([stream.Transform](https://nodejs.org/api/stream.html#stream_class_stream_transform))
 
-It compiles the [Pug](https://github.com/pugjs/jade) template with passing the string of source [file contents](https://github.com/gulpjs/vinyl#optionscontents) to the compiler as `contents` variable. [`data` property](https://github.com/phated/gulp-jade#use-with-gulp-data) of the contents are also used.
+It compiles the [Pug](https://github.com/pugjs/pug) template with passing the string of source [file contents](https://github.com/gulpjs/vinyl#optionscontents) to the compiler as `contents` variable. [`data` property](https://github.com/jamen/gulp-pug#pugoptions) of the contents are also used.
 
 #### options.varName
 
@@ -60,12 +60,12 @@ function setTitle(file) {
 }
 
 gulp.task('default', () => {
-  return gulp.src('src.txt')            // src.txt      : 'Hi'
+  return gulp.src('src.txt')          // src.txt      : 'Hi'
     .pipe(data(setTitle)) 
-    .pipe(assignToPug('layout.jade', { // template.jade: 'h1= title\np=  body'
+    .pipe(assignToPug('layout.pug', { // template.pug: 'h1= title\np=  body'
       varName: 'body'
     })) 
-    .pipe(gulp.dest('dest'))            // dest/src.html: '<h1>src</h1><p>Hi</p>'
+    .pipe(gulp.dest('dest'))          // dest/src.html: '<h1>src</h1><p>Hi</p>'
 });
 ```
 

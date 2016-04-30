@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "fs-readfile-promise": "^2.0.1",
-    "gulp-jade": "^1.1.0",
+    "gulp-pug": "^2.0.0",
     "gulp-util": "^3.0.6",
     "replace-ext": "^0.0.1",
     "vinyl-bufferstream": "^1.0.1"

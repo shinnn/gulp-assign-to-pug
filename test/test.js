@@ -10,7 +10,7 @@ test('gulp-assign-to-pug', t => {
 
   t.equal(assignToPug.name, 'gulpAssignToPug', 'should have a function name.');
 
-  assignToPug('test/fixture.jade')
+  assignToPug('test/fixture.pug')
   .on('error', t.fail)
   .on('data', file => {
     t.equal(
@@ -32,19 +32,19 @@ test('gulp-assign-to-pug', t => {
 
   tmpFile.data = {title: 'Hello'};
 
-  assignToPug('test/fixture.jade', {pretty: true})
+  assignToPug('test/fixture.pug', {pretty: true})
   .on('error', t.fail)
   .on('data', file => {
     t.equal(
       String(file.contents),
-      '\n<section>12345\n  <div>Hello</div></section>',
+      '\n<section>12345\n  <div>Hello</div>\n</section>',
       'should use file.data and Pug options.'
     );
     t.equal(file.path, 'bar.html', 'should replace file extension with .html.');
   })
   .end(tmpFile);
 
-  assignToPug('test/fixture.jade', {varName: 'footer'})
+  assignToPug('test/fixture.pug', {varName: 'footer'})
   .on('error', t.fail)
   .on('data', file => {
     file.contents.on('data', data => {
@@ -60,7 +60,7 @@ test('gulp-assign-to-pug', t => {
     contents: stringToStream('abcdefg')
   }));
 
-  assignToPug('test/fixture.jade', {})
+  assignToPug('test/fixture.pug', {})
   .on('error', err => {
     t.ok(
       /Invalid value/.test(err.message),
@@ -77,7 +77,7 @@ test('gulp-assign-to-pug', t => {
     contents: new Buffer('error')
   }));
 
-  assignToPug('this/file/does/not/exist.jade')
+  assignToPug('this/file/does/not/exist.pug')
   .on('error', function(err) {
     t.equal(err.code, 'ENOENT', 'should emit an error when it cannot read the template.');
     t.strictEqual(
@@ -97,7 +97,7 @@ test('gulp-assign-to-pug', t => {
     }
   };
 
-  assignToPug('test/fixture.jade')
+  assignToPug('test/fixture.pug')
   .on('error', err => {
     t.equal(
       err.message,
