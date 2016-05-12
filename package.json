@@ -27,14 +27,14 @@
   ],
   "dependencies": {
     "fs-readfile-promise": "^2.0.1",
-    "gulp-pug": "^2.0.0",
+    "gulp-pug": "^3.0.2",
     "gulp-util": "^3.0.6",
     "replace-ext": "^0.0.1",
     "vinyl-bufferstream": "^1.0.1"
   },
   "devDependencies": {
     "@shinnn/eslint-config-node": "^2.0.0",
-    "eslint": "^2.7.0",
+    "eslint": "^2.9.0",
     "from2-string": "^1.1.0",
     "istanbul": "^0.4.3",
     "tape": "^4.5.1",
