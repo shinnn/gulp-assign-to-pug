@@ -81,7 +81,7 @@ test('gulp-assign-to-pug', t => {
   .on('error', function(err) {
     t.equal(err.code, 'ENOENT', 'should emit an error when it cannot read the template.');
     t.strictEqual(
-      err.hasOwnProperty('fileName'),
+      Object.prototype.hasOwnProperty.call(err, 'fileName'),
       false,
       'should not include vinyl file path to the error when it cannot read the template.'
     );
@@ -114,13 +114,13 @@ test('gulp-assign-to-pug', t => {
 
   t.throws(
     () => assignToPug({}),
-    /must be a path/,
+    /{} is not a string\. The first argument to gulp-assign-to-pug must be a path to a \.pug file\./,
     'should throw an error when the first argument is not a string.'
   );
 
   t.throws(
-    () => assignToPug('', {varName: 123}),
-    /must be a string/,
+    () => assignToPug('', {varName: [123, null]}),
+    /\[ 123, null \] is not a string\. `varName` option must be a string\./,
     'should throw an error when the `varName` option is not a string.'
   );
 });

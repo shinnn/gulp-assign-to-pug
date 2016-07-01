@@ -4,6 +4,7 @@
 */
 'use strict';
 
+const inspect = require('util').inspect;
 const path = require('path');
 const Transform = require('stream').Transform;
 
@@ -20,8 +21,8 @@ function customError(err, options) {
 module.exports = function gulpAssignToPug(filePath, options) {
   if (typeof filePath !== 'string') {
     throw customError(new TypeError(
-      String(filePath) +
-      ' is not a string. The first argument to gulp-assign-to-pug must be a path to a pug file.'
+      inspect(filePath) +
+      ' is not a string. The first argument to gulp-assign-to-pug must be a path to a .pug file.'
     ));
   }
 
@@ -33,7 +34,7 @@ module.exports = function gulpAssignToPug(filePath, options) {
   if (options.varName !== undefined) {
     if (typeof options.varName !== 'string') {
       throw customError(new TypeError(
-        String(options.varName) +
+        inspect(options.varName) +
         ' is not a string. `varName` option must be a string.'
       ));
     }
