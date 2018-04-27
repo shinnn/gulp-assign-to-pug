@@ -7,7 +7,7 @@ const File = require('vinyl');
 const test = require('tape');
 
 test('gulp-assign-to-pug', t => {
-	t.plan(15);
+	t.plan(17);
 
 	assignToPug('test/fixture.pug')
 	.on('error', t.fail)
@@ -143,5 +143,17 @@ test('gulp-assign-to-pug', t => {
 		() => assignToPug(__filename, {varName: [123, null]}),
 		/\[ 123, null \] is not a string\. `varName` option must be a string\./,
 		'should throw an error when the `varName` option is not a string.'
+	);
+
+	t.throws(
+		() => assignToPug(),
+		/^RangeError.*Expected 1 or 2 arguments \(<string>\[, <Object>]\), but got no arguments\./,
+		'should throw an error when it takes no arguments.'
+	);
+
+	t.throws(
+		() => assignToPug('_', {}, '_'),
+		/^RangeError.*Expected 1 or 2 arguments \(<string>\[, <Object>]\), but got 3 arguments\./,
+		'should throw an error when it takes too many arguments.'
 	);
 });
