@@ -1,17 +1,19 @@
 'use strict';
 
+const {PassThrough} = require('stream');
+
 const assignToPug = require('..');
 const File = require('vinyl');
 const test = require('tape');
 
 test('gulp-assign-to-pug', t => {
-	t.plan(13);
+	t.plan(15);
 
 	assignToPug('test/fixture.pug')
 	.on('error', t.fail)
 	.on('data', file => {
 		t.equal(
-			String(file.contents),
+			file.contents.toString(),
 			'<section><a></a><div></div></section>',
 			'should assign file contents to a Pug template.'
 		);
@@ -33,7 +35,7 @@ test('gulp-assign-to-pug', t => {
 	.on('error', t.fail)
 	.on('data', file => {
 		t.equal(
-			String(file.contents),
+			file.contents.toString(),
 			'\n<section>12345\n  <div>Hello</div>\n</section>',
 			'should use file.data and Pug options.'
 		);
@@ -55,10 +57,34 @@ test('gulp-assign-to-pug', t => {
 		contents: Buffer.from('abcdefg')
 	}));
 
+	assignToPug('test/fixture.pug')
+	.on('error', t.fail)
+	.on('data', file => {
+		t.equal(
+			file.contents,
+			null,
+			'should pass null files as they are.'
+		);
+	})
+	.end(new File());
+
+	assignToPug('test/fixture.pug')
+	.on('error', err => {
+		t.equal(
+			err.message,
+			'Stream file is not supported.',
+			'should emit an error when when file has Stream contents.'
+		);
+	})
+	.end(new File({
+		path: 'stream.pug',
+		contents: new PassThrough()
+	}));
+
 	assignToPug('test/fixture.pug', {})
 	.on('error', err => {
 		t.ok(
-			/Invalid value/.test(err.message),
+			err.message.includes('Invalid value'),
 			'should emit an error when when Pug fails to compile the template.'
 		);
 		t.equal(
@@ -87,7 +113,7 @@ test('gulp-assign-to-pug', t => {
 
 	const corruptFile = {
 		path: 'quux.txt',
-		clone: function corruptVinylMethod() {
+		isStream: function corruptVinylMethod() {
 			throw new Error('This is not a valid vinyl file.');
 		}
 	};

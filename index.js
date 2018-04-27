@@ -8,7 +8,6 @@ const gulpPug = require('gulp-pug');
 const PluginError = require('plugin-error');
 const readFilePromise = require('fs-readfile-promise');
 const replaceExt = require('replace-ext');
-const VinylBufferStream = require('vinyl-bufferstream');
 
 function customError(err, options) {
 	return new PluginError('gulp-assign-to-pug', err, options);
@@ -37,35 +36,29 @@ module.exports = function gulpAssignToPug(filePath, options) {
 		objectMode: true,
 		transform(file, enc, cb) {
 			promise.then(template => {
+				if (file.isStream()) {
+					cb(customError('Stream file is not supported.'));
+					return;
+				}
+
+				if (!file.isBuffer()) {
+					cb(null, file);
+					return;
+				}
+
 				const fileClone = file.clone({contents: false});
 				fileClone.contents = template;
 				fileClone.data = file.data || {};
+				fileClone.data[varName] = String(file.contents);
 
-				function assignContentsToPug(buf, done) {
-					fileClone.data[varName] = String(buf);
-
-					gulpPug(options)
-					.on('error', function emitGulpJadeError(err) {
-						done(customError(err));
-					})
-					.once('data', function emitGulpJadeData(newFile) {
-						file.path = replaceExt(file.path, path.extname(newFile.path));
-						done(null, newFile.contents);
-					})
-					.end(fileClone);
-				}
-
-				const run = new VinylBufferStream(assignContentsToPug);
-
-				run(file, (err, contents) => {
-					if (err) {
-						this.emit('error', customError(err, {fileName: file.path}));
-					} else {
-						file.contents = contents;
-						this.push(file);
-					}
-					cb();
-				});
+				gulpPug(options)
+				.on('error', err => cb(customError(err, {fileName: file.path})))
+				.once('data', newFile => {
+					file.contents = newFile.contents;
+					file.path = replaceExt(file.path, path.extname(newFile.path));
+					cb(null, file);
+				})
+				.end(fileClone);
 			}, err => {
 				setImmediate(() => this.emit('error', err));
 			}).catch(err => {
