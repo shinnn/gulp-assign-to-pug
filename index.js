@@ -6,9 +6,11 @@ const {readFile} = require('fs');
 const {Transform} = require('stream');
 
 const gulpPug = require('gulp-pug');
+const inspectWithKind = require('inspect-with-kind');
+const {isVinyl} = require('vinyl');
 const PluginError = require('plugin-error');
-const replaceExt = require('replace-ext');
 
+const FILE_TYPE_ERROR = 'Expected to receive a Vinyl object https://github.com/gulpjs/vinyl#new-vinyloptions';
 const promisifiedReadFile = promisify(readFile);
 
 function customError(err, options) {
@@ -52,45 +54,57 @@ module.exports = function gulpAssignToPug(...args) {
 
 	return new Transform({
 		objectMode: true,
-		transform(file, enc, cb) {
-			(async () => {
-				try {
-					if (!template && !await firstTry) {
-						template = await promisifiedReadFile(filePath);
-					}
-				} catch (err) {
-					cb(customError(err));
+		async transform(file, enc, cb) {
+			try {
+				if (!template && !await firstTry) {
+					template = await promisifiedReadFile(filePath);
+				}
+			} catch (err) {
+				cb(customError(err));
+				return;
+			}
+
+			if (typeof file !== 'object') {
+				cb(customError(`${FILE_TYPE_ERROR}, but got a non-object value ${
+					inspectWithKind(file)
+				}.`));
+				return;
+			}
+
+			if (!isVinyl(file)) {
+				cb(customError(`${FILE_TYPE_ERROR}, but got a non-Vinyl object ${
+					inspectWithKind(file)
+				}.`));
+				return;
+			}
+
+			try {
+				if (file.isStream()) {
+					cb(customError('Stream file is not supported.'));
 					return;
 				}
 
-				try {
-					if (file.isStream()) {
-						cb(customError('Stream file is not supported.'));
-						return;
-					}
-
-					if (!file.isBuffer()) {
-						cb(null, file);
-						return;
-					}
-
-					const fileClone = file.clone({contents: false});
-					fileClone.contents = template;
-					fileClone.data = file.data || {};
-					fileClone.data[varName] = file.contents.toString();
-
-					gulpPug(options)
-					.on('error', err => cb(customError(err, {fileName: file.path})))
-					.once('data', newFile => {
-						file.contents = newFile.contents;
-						file.path = replaceExt(file.path, extname(newFile.path));
-						cb(null, file);
-					})
-					.end(fileClone);
-				} catch (err) {
-					cb(customError(err, {fileName: file.path}));
+				if (!file.isBuffer()) {
+					cb(null, file);
+					return;
 				}
-			})();
+
+				const fileClone = file.clone({contents: false});
+				fileClone.contents = template;
+				fileClone.data = file.data || {};
+				fileClone.data[varName] = file.contents.toString();
+
+				gulpPug(options)
+				.on('error', err => cb(customError(err, {fileName: file.path})))
+				.once('data', newFile => {
+					file.contents = newFile.contents;
+					file.extname = extname(newFile.path);
+					cb(null, file);
+				})
+				.end(fileClone);
+			} catch (err) {
+				cb(customError(err, {fileName: file.path}));
+			}
 		}
 	});
 };

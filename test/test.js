@@ -7,7 +7,7 @@ const File = require('vinyl');
 const test = require('tape');
 
 test('gulp-assign-to-pug', t => {
-	t.plan(17);
+	t.plan(19);
 
 	assignToPug('test/fixture.pug')
 	.on('error', t.fail)
@@ -109,11 +109,11 @@ test('gulp-assign-to-pug', t => {
 	})
 	.write(new File({path: 'this/path/should/not/be/included/to/the/error'}));
 
-	const corruptFile = {
-		path: 'quux.txt',
-		isStream: function corruptVinylMethod() {
-			throw new Error('This is not a valid vinyl file.');
-		}
+	const corruptFile = new File({
+		path: 'quux.txt'
+	});
+	corruptFile.isStream = function corruptMethod() {
+		throw new Error('This is not a valid vinyl file.');
 	};
 
 	assignToPug('test/fixture.pug')
@@ -130,6 +130,28 @@ test('gulp-assign-to-pug', t => {
 		);
 	})
 	.end(corruptFile);
+
+	assignToPug(__filename)
+	.on('error', ({message}) => {
+		t.equal(
+			message,
+			'Expected to receive a Vinyl object https://github.com/gulpjs/vinyl#new-vinyloptions' +
+			', but got a non-object value Symbol(!).',
+			'should emit an error when it receives a non-object value.'
+		);
+	})
+	.write(Symbol('!'));
+
+	assignToPug(__filename)
+	.on('error', ({message}) => {
+		t.equal(
+			message,
+			'Expected to receive a Vinyl object https://github.com/gulpjs/vinyl#new-vinyloptions' +
+			', but got a non-Vinyl object Set {}.',
+			'should emit an error when it receives a non-Vinyl object.'
+		);
+	})
+	.write(new Set());
 
 	t.throws(
 		() => assignToPug({}),
