@@ -1,13 +1,15 @@
 'use strict';
 
-const {inspect} = require('util');
 const {extname} = require('path');
+const {inspect, promisify} = require('util');
+const {readFile} = require('fs');
 const {Transform} = require('stream');
 
 const gulpPug = require('gulp-pug');
 const PluginError = require('plugin-error');
-const readFilePromise = require('fs-readfile-promise');
 const replaceExt = require('replace-ext');
+
+const promisifiedReadFile = promisify(readFile);
 
 function customError(err, options) {
 	return new PluginError('gulp-assign-to-pug', err, options);
@@ -41,7 +43,7 @@ module.exports = function gulpAssignToPug(...args) {
 	let template;
 	const firstTry = (async () => {
 		try {
-			template = await readFilePromise(filePath);
+			template = await promisifiedReadFile(filePath);
 			return true;
 		} catch (err) {
 			return false;
@@ -54,7 +56,7 @@ module.exports = function gulpAssignToPug(...args) {
 			(async () => {
 				try {
 					if (!template && !await firstTry) {
-						template = await readFilePromise(filePath);
+						template = await promisifiedReadFile(filePath);
 					}
 				} catch (err) {
 					cb(customError(err));

@@ -24,7 +24,6 @@
 		"contents"
 	],
 	"dependencies": {
-		"fs-readfile-promise": "^3.0.1",
 		"gulp-pug": "^4.0.1",
 		"plugin-error": "^1.0.1",
 		"replace-ext": "^1.0.0"
