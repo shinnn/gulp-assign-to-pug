@@ -2,7 +2,6 @@
 
 [![npm version](https://img.shields.io/npm/v/gulp-assign-to-pug.svg)](https://www.npmjs.com/package/gulp-assign-to-pug)
 [![Build Status](https://travis-ci.org/shinnn/gulp-assign-to-pug.svg?branch=master)](https://travis-ci.org/shinnn/gulp-assign-to-pug)
-[![Build status](https://ci.appveyor.com/api/projects/status/an9bqn2br7bw23nl/branch/master?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/gulp-assign-to-pug/branch/master)
 [![Coverage Status](https://coveralls.io/repos/github/shinnn/gulp-assign-to-pug/badge.svg?branch=master)](https://coveralls.io/github/shinnn/gulp-assign-to-pug?branch=master)
 
 A [gulp](https://github.com/gulpjs/gulp) 4 plugin to assign file contents to the [Pug](https://pugjs.org/) template as a local variable
