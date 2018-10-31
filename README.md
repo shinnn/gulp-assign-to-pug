@@ -34,7 +34,7 @@ const assignToPug = require('gulp-assign-to-pug');
 
 ### assignToPug(*templatePath* [, *options*])
 
-*templatePath*: `string` (path to a `.jade` file)  
+*templatePath*: `string` `Buffer` `Uint8Array` `URL` (path to a `.jade` file)  
 *options*: `Object` (directly passed to [gulp-pug](https://github.com/jamen/gulp-pug) options)  
 Return: [`stream.Transform`](https://nodejs.org/api/stream.html#stream_class_stream_transform)
 

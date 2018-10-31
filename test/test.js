@@ -1,6 +1,8 @@
 'use strict';
 
+const {join} = require('path');
 const {PassThrough} = require('stream');
+const {pathToFileURL} = require('url');
 
 const assignToPug = require('..');
 const File = require('vinyl');
@@ -31,7 +33,7 @@ test('gulp-assign-to-pug', t => {
 
 	tmpFile.data = {title: 'Hello'};
 
-	assignToPug('test/fixture.pug', {pretty: true})
+	assignToPug(Buffer.from('test/fixture.pug'), {pretty: true})
 	.on('error', t.fail)
 	.on('data', file => {
 		t.equal(
@@ -43,7 +45,7 @@ test('gulp-assign-to-pug', t => {
 	})
 	.end(tmpFile);
 
-	assignToPug('test/fixture.pug', {varName: 'footer'})
+	assignToPug(pathToFileURL(join(__dirname, 'fixture.pug')), {varName: 'footer'})
 	.on('error', t.fail)
 	.on('data', file => {
 		t.equal(
@@ -155,8 +157,8 @@ test('gulp-assign-to-pug', t => {
 
 	t.throws(
 		() => assignToPug({}),
-		/\{\} is not a string\. The first argument to gulp-assign-to-pug must be a path to a \.pug file\./u,
-		'should throw an error when the first argument is not a string.'
+		/^TypeError.*ERR_INVALID_ARG_TYPE/u,
+		'should throw an error when the first argument is not a valid path type.'
 	);
 
 	t.throws(

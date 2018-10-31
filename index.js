@@ -1,13 +1,14 @@
 'use strict';
 
+const {access, readFile} = require('fs');
 const {extname} = require('path');
 const {inspect, promisify} = require('util');
-const {readFile} = require('fs');
 const {Transform} = require('stream');
 
 const gulpPug = require('gulp-pug');
 const inspectWithKind = require('inspect-with-kind');
 const {isVinyl} = require('vinyl');
+const noop = require('nop');
 const PluginError = require('plugin-error');
 
 const FILE_TYPE_ERROR = 'Expected to receive a Vinyl object https://github.com/gulpjs/vinyl#new-vinyloptions';
@@ -28,9 +29,8 @@ module.exports = function gulpAssignToPug(...args) {
 
 	const [filePath, options = {}] = args;
 
-	if (typeof filePath !== 'string') {
-		throw customError(new TypeError(`${inspect(filePath)} is not a string. The first argument to gulp-assign-to-pug must be a path to a .pug file.`));
-	}
+	// validate the 1st argument
+	access(filePath, noop);
 
 	let varName;
 	if (options.varName !== undefined) {
