@@ -99,15 +99,13 @@ test('gulp-assign-to-pug', t => {
 	}));
 
 	assignToPug('this/file/does/not/exist.pug')
-	.on('error', function(err) {
+	.on('error', err => {
 		t.equal(err.code, 'ENOENT', 'should emit an error when it cannot read the template.');
 		t.strictEqual(
 			Object.prototype.hasOwnProperty.call(err, 'fileName'),
 			false,
 			'should not include vinyl file path to the error when it cannot read the template.'
 		);
-
-		this.end(new File({contents: Buffer.from('This file should be ignored.')}));
 	})
 	.write(new File({path: 'this/path/should/not/be/included/to/the/error'}));
 

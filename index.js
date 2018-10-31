@@ -1,7 +1,7 @@
 'use strict';
 
 const {inspect} = require('util');
-const path = require('path');
+const {extname} = require('path');
 const {Transform} = require('stream');
 
 const gulpPug = require('gulp-pug');
@@ -38,40 +38,57 @@ module.exports = function gulpAssignToPug(...args) {
 		varName = 'contents';
 	}
 
-	const promise = readFilePromise(filePath);
+	let template;
+	const firstTry = (async () => {
+		try {
+			template = await readFilePromise(filePath);
+			return true;
+		} catch (err) {
+			return false;
+		}
+	})();
 
 	return new Transform({
 		objectMode: true,
 		transform(file, enc, cb) {
-			promise.then(template => {
-				if (file.isStream()) {
-					cb(customError('Stream file is not supported.'));
+			(async () => {
+				try {
+					if (!template && !await firstTry) {
+						template = await readFilePromise(filePath);
+					}
+				} catch (err) {
+					cb(customError(err));
 					return;
 				}
 
-				if (!file.isBuffer()) {
-					cb(null, file);
-					return;
+				try {
+					if (file.isStream()) {
+						cb(customError('Stream file is not supported.'));
+						return;
+					}
+
+					if (!file.isBuffer()) {
+						cb(null, file);
+						return;
+					}
+
+					const fileClone = file.clone({contents: false});
+					fileClone.contents = template;
+					fileClone.data = file.data || {};
+					fileClone.data[varName] = file.contents.toString();
+
+					gulpPug(options)
+					.on('error', err => cb(customError(err, {fileName: file.path})))
+					.once('data', newFile => {
+						file.contents = newFile.contents;
+						file.path = replaceExt(file.path, extname(newFile.path));
+						cb(null, file);
+					})
+					.end(fileClone);
+				} catch (err) {
+					cb(customError(err, {fileName: file.path}));
 				}
-
-				const fileClone = file.clone({contents: false});
-				fileClone.contents = template;
-				fileClone.data = file.data || {};
-				fileClone.data[varName] = file.contents.toString();
-
-				gulpPug(options)
-				.on('error', err => cb(customError(err, {fileName: file.path})))
-				.once('data', newFile => {
-					file.contents = newFile.contents;
-					file.path = replaceExt(file.path, path.extname(newFile.path));
-					cb(null, file);
-				})
-				.end(fileClone);
-			}, err => {
-				setImmediate(() => this.emit('error', err));
-			}).catch(err => {
-				setImmediate(() => this.emit('error', customError(err, {fileName: file.path})));
-			});
+			})();
 		}
 	});
 };
