@@ -135,25 +135,25 @@ test('gulp-assign-to-pug', t => {
 
 	t.throws(
 		() => assignToPug({}),
-		/{} is not a string\. The first argument to gulp-assign-to-pug must be a path to a \.pug file\./,
+		/\{\} is not a string\. The first argument to gulp-assign-to-pug must be a path to a \.pug file\./u,
 		'should throw an error when the first argument is not a string.'
 	);
 
 	t.throws(
 		() => assignToPug(__filename, {varName: [123, null]}),
-		/\[ 123, null \] is not a string\. `varName` option must be a string\./,
+		/\[ 123, null \] is not a string\. `varName` option must be a string\./u,
 		'should throw an error when the `varName` option is not a string.'
 	);
 
 	t.throws(
 		() => assignToPug(),
-		/^RangeError.*Expected 1 or 2 arguments \(<string>\[, <Object>]\), but got no arguments\./,
+		/^RangeError.*Expected 1 or 2 arguments \(<string>\[, <Object>\]\), but got no arguments\./u,
 		'should throw an error when it takes no arguments.'
 	);
 
 	t.throws(
 		() => assignToPug('_', {}, '_'),
-		/^RangeError.*Expected 1 or 2 arguments \(<string>\[, <Object>]\), but got 3 arguments\./,
+		/^RangeError.*Expected 1 or 2 arguments \(<string>\[, <Object>\]\), but got 3 arguments\./u,
 		'should throw an error when it takes too many arguments.'
 	);
 });
